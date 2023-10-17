@@ -1,0 +1,107 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-group label {
+            margin-right: 10px;
+        }
+
+        .alert-danger {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form action="." method="POST"> {% csrf_token %}
+
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-danger" role="alert">
+                <strong>Message:</strong> {{ message }}<br><br>
+            </div>
+            {% endfor %}
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="password2">Confirm Password:</label>
+            <input type="password" id="password2" name="password2" required>
+
+            <label>Role:</label>
+            <div class="radio-group">
+                <input type="radio" id="faculty" name="role" value="Faculty" required>
+                <label for="faculty">Faculty</label>
+                <input type="radio" id="student" name="role" value="Student" required>
+                <label for="student">Student</label>
+            </div>
+
+            <input type="submit" value="Sign Up">
+        </form>
+    </div>
+</body>
+</html>
+
+
+{% endblock %}

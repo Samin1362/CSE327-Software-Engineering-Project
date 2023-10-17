@@ -1,0 +1,83 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Marks</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Exam</th>
+                <th>Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>MCQ</td>
+                <td>{{ student.mcq_marks }}</td>
+            </tr>
+            <tr>
+                <td>Short Answer</td>
+                <td>{{ student.short_marks }}</td>
+            </tr>
+            <tr>
+                <td>Broad Question</td>
+                <td>{{ student.broad_marks }}</td>
+            </tr>
+            <tr>
+                <td>Voice Question</td>
+                <td>{{ student.voice_marks }}</td>
+            </tr>
+            <tr>
+                <td>Total Marks</td>
+                <td>{{ student.student_marks }}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+{% endblock %}

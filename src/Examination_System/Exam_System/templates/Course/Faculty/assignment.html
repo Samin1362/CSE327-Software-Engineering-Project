@@ -1,0 +1,177 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Creation Page</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .question-type {
+            background-color: #fff;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        label, textarea, input {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-success {
+        background-color: #28a745;
+        color: #fff;
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Create Questions</h1>
+
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-danger" role="alert">
+            <strong>Message:</strong> {{ message }}<br><br>
+        </div>
+        {% endfor %}
+
+    </header>
+
+    <form action="." method="POST"> {% csrf_token %}
+
+        <section class="question-type">
+            <h2>Set Exam Duration</h2>
+                <input name="exam_duration" type="text" id="short-answer" placeholder="Enter time in seconds ">      
+        </section>
+
+
+        <section class="question-type">
+            <h2>Multiple Choice Question (MCQ)</h2>
+            <!-- <form action="." method="POST"> {% csrf_token %} -->
+    
+                <label for="mcq-question">Question:</label>
+                <textarea name="mcq_question" id="mcq-question" rows="3" placeholder="Enter your MCQ question here"></textarea>
+                <label for="mcq-options">Options:</label>
+                <input name="option1" type="text" id="mcq-option-1" placeholder="Option 1">
+                <input name="option2" type="text" id="mcq-option-2" placeholder="Option 2">
+                <input name="option3" type="text" id="mcq-option-3" placeholder="Option 3">
+                <input name="option4" type="text" id="mcq-option-4" placeholder="Option 4">
+                <label for="mcq-answer">Correct Answer:</label>
+                <input name="mcq_answer" type="text" id="mcq-answer" placeholder="Correct option (e.g., A)">
+                
+            <!-- </form> -->
+        </section>
+    
+        <section class="question-type">
+            <h2>Short Question</h2>
+            <!-- <form action="." method="POST"> {% csrf_token %} -->
+    
+                <label for="short-question">Question:</label>
+                <textarea name="short_question" id="short-question" rows="3" placeholder="Enter your short question here"></textarea>
+                <label for="short-answer">Correct Answer (keywords):</label>
+                <input name="short_answer" type="text" id="short-answer" placeholder="Correct answer ">
+                
+            <!-- </form> -->
+        </section>
+    
+        <section class="question-type">
+            <h2>Broad Question</h2>
+            <!-- <form action="." method="POST"> {% csrf_token %} -->
+                <label for="broad-question">Question:</label>
+                <textarea name="broad_question" id="broad-question" rows="3" placeholder="Enter your broad question here"></textarea>
+                <label for="broad-answer">Correct Answer (keywords):</label>
+                <input name="broad_answer" type="text" id="broad-answer" placeholder="Correct answer ">
+        
+            <!-- </form> -->
+        </section>
+    
+        <section class="question-type">
+            <h2>Voice-Based Question</h2>
+            <!-- <form action="." method="POST"> {% csrf_token %} -->
+                <label for="voice-question">Question:</label>
+                <textarea name="voice_question" id="voice-question" rows="3" placeholder="Record your voice-based question"></textarea>
+                <label for="voice-answer">Correct Answer (keywords):</label>
+                <input name="voice_answer" type="text" id="voice-answer" placeholder="Correct answer">
+
+                <button type="submit-button">Add Questions</button>
+            <!-- </form> -->
+        </section>
+
+    </form>
+
+
+</body>
+</html>
+
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Announcement Page</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .announcements {
+            margin-top: 10px;
+        }
+
+        .announcement-box {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        /* You can add more styles as needed for a fully customized design. */
+
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Student Announcements</h1>
+    </header>
+
+    <main>
+        <section class="announcements">
+            <h2>Recent Announcements</h2>
+            <div class="announcement-box">
+                <h3>{{ object }}</h3>
+            </div>
+            <!-- Add more announcements as needed -->
+        </section>
+    </main>
+</body>
+</html>
+
+{% endblock %}

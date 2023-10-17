@@ -1,0 +1,109 @@
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+    /* Add styles for the error message tag */
+        .alert-error {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-group label {
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+
+        <form action="." method="POST"> {% csrf_token %}
+
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-danger" role="alert">
+                <strong>Message:</strong> {{ message }}<br><br>
+            </div>
+            {% endfor %}
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" >
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name = "password" >
+
+            <label>Role:</label>
+            <div class="radio-group">
+                <input type="radio" id="faculty" name="role" value="Faculty" >
+                <label for="faculty">Faculty</label>
+                <input type="radio" id="student" name="role" value="Student" >
+                <label for="student">Student</label>
+            </div>
+
+            <input type="submit" name = 'action' value="login">
+            <p style="text-align: center;">
+                Don't have an account? <input type="submit" name="action" value="signup">
+            </p>
+            
+        </form>
+
+    </div>
+</body>
+</html>
+{% endblock %}

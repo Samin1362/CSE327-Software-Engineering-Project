@@ -1,0 +1,219 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Answers</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style the voice recording buttons */
+        #record-button, #stop-button {
+            display: block;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #stop-button {
+            background-color: #ff3333;
+        }
+
+        h3 {
+            color: rgb(67, 122, 12);
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Student Answers</h1>
+    </header>
+
+    <main>
+
+        <aside class="sidebar">
+            <div class="timer">
+                <h2>Time Remaining</h2>
+                <div id="timer">60:00</div>
+            </div>
+        </aside>
+
+        <form action="." method="POST"> {% csrf_token %}
+
+            <section class="question">
+                <h2>Enter Email</h2>
+                    <input name="email" type="text" id="email" placeholder="Your Answer">
+                    <!-- <button type="button">Submit Short Answer</button> -->
+
+            </section>
+            
+
+            <section class="question">
+                <h2>Multiple Choice Question (MCQ)</h2>
+
+                    <p>Question: {{ question.mcq_question }}</p>
+                    <input type="radio" id="mcq-option-a" name="mcq_answer" value="A">
+                    <label for="mcq-option-a">a) {{ question.option_1 }}</label>
+                    <br>
+                    <input type="radio" id="mcq-option-b" name="mcq_answer" value="B">
+                    <label for="mcq-option-b">b) {{ question.option_2 }}</label>
+                    <br>
+                    <input type="radio" id="mcq-option-c" name="mcq_answer" value="C">
+                    <label for="mcq-option-c">c) {{ question.option_3 }}</label>
+                    <br>
+                    <input type="radio" id="mcq-option-d" name="mcq_answer" value="D">
+                    <label for="mcq-option-d">d) {{ question.option_4 }}</label>
+                    <br>
+                    <!-- <button type="button">Submit MCQ Answer</button> -->
+
+            </section>
+    
+            <section class="question">
+                <h2>Short Question</h2>
+
+                    <p>Question: {{ question.short_question }}</p>
+                    <input name="short-answer" type="text" id="short-answer" placeholder="Your Answer">
+                    <!-- <button type="button">Submit Short Answer</button> -->
+
+            </section>
+    
+            <section class="question">
+                <h2>Broad Question</h2>
+
+                    <p>Question: {{ question.broad_question }}</p>
+                    <textarea name="broad-answer" id="broad-answer" rows="4" placeholder="Your Answer"></textarea>
+                    <!-- <button type="button">Submit Broad Answer</button> -->
+
+            </section>
+    
+            <section class="question">
+                <h2>Voice-Based Question</h2>
+
+                    <h3>After clicking the submit button you will have 1 minutes to answer the voice based question</h3> <br>
+                    <h3>You must click the submit button 1 minute before the remaining time.</h3> <br>
+                    <p>Question: {{ question.voice_question }}</p>
+                    <button type="submit" id="record-button">Submit Answer</button>
+                    <!-- <button type="button" id="stop-button">Stop Recording</button> -->
+ 
+            </section>
+        </form>
+
+    
+        <script>
+            var timerDisplay = document.getElementById('timer');
+            var examDuration = "{{ question.exam_duration }}"; // Get the exam duration from the Django context in second
+            var timer = examDuration;
+            
+            function updateTimer() {
+                var minutes = Math.floor(timer / 60);
+                var seconds = timer % 60;
+                
+                // Display the time remaining
+                timerDisplay.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                
+                if (timer <= 0) {
+                    // Handle the timer expiration (e.g., submit the exam)
+                    alert("Time's up! Your exam has been submitted.");
+                } else {
+                    timer--;
+                    setTimeout(updateTimer, 1000); // Update the timer every second
+                }
+            }
+            
+            updateTimer(); // Start the timer
+        </script>
+
+    </main>
+</body>
+</html>
+
+
+{% endblock %}

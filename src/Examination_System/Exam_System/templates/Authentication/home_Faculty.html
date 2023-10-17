@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty Cohort</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .cohort-card {
+            width: 400px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .cohort-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .course-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .course-list-item {
+            margin: 5px 0;
+        }
+
+        .course-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="cohort-card">
+
+        <form action="." method="POST"> {% csrf_token %}
+
+            <h2 class="cohort-title">Faculty Cohort</h2>
+        
+            <ul class="course-list">
+                <li class="course-list-item">Course 1: Introduction to Computer Science <input class="course-button" type="submit" name="View" value="View"></li>
+                <li class="course-list-item">Course 2: Web Development Fundamentals <input class="course-button" type="button" value="Invalid"></li>
+                <li class="course-list-item">Course 3: Data Structures and Algorithms <input class="course-button" type="button" value="Invalid"></li>
+                <li class="course-list-item">Course 4: Database Management <input class="course-button" type="button" value="Invalid"></li>
+                <!-- Add more courses with buttons as needed -->
+            </ul>
+        </form>
+
+    
+    </div>
+</body>
+</html>

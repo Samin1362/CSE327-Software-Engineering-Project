@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty Course</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    nav {
+        background-color: #007BFF;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        width: 100%;
+        font-size: 24px;
+    }
+
+    .container {
+        display: flex;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .sidebar {
+        width: 25%;
+        padding: 20px;
+        border-right: 1px solid #ccc;
+    }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button#add-student-button {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    ul.student-list {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    button.remove-student-button {
+        background-color: #38dc35;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    /* Add styles for the error message tag */
+    .alert-error {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    /* Additional styles for course details go here */
+
+
+    </style>
+
+</head>
+<body>
+    <nav>
+        <div class="logo">View Student</div>
+    </nav>
+    <div class="container">
+        <div class="content">
+            <h1>Students</h1>
+            <ul class="student-list" id="student-list">
+                {% for student in students %}
+                <li>
+                    <strong>Name:</strong> {{ student.student_name }}<br>
+                    <button class="remove-student-button">Enroll</button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

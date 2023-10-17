@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Course</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .sidenav {
+        background-color: #007BFF;
+        color: #fff;
+        width: 250px;
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+    }
+
+    .sidenav-title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .sidenav-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .sidenav-list li {
+        margin-bottom: 10px;
+    }
+
+    .sidenav-list li a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+    }
+
+    .sidenav-list li a:hover {
+        text-decoration: underline;
+    }
+
+    .content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+
+    .course-subsection {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+
+    </style>
+
+</head>
+<body>
+
+    <form action="." method="POST"> {% csrf_token %}
+        <nav class="sidenav">
+            <div class="sidenav-title">Student Course</div>
+            <ul class="sidenav-list">
+                <li><input type="submit" name="action" value="Announcements"></li>
+                <li><input type="submit" name="action" value="Students"></li>
+                <li><input type="submit" name="action" value="Assignment"></li>
+                <li><input type="submit" name="action" value="See Grades"></li>
+            </ul>
+        </nav>   
+    </form>
+    
+
+</body>
+</html>

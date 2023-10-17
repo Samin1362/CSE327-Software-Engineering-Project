@@ -1,0 +1,101 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Announcements</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .announcement-form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-success {
+        background-color: #28a745;
+        color: #fff;
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Faculty Announcements</h1>
+        <form action="." method="POST"> {% csrf_token %}
+
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-danger" role="alert">
+                <strong>Message:</strong> {{ message }}<br><br>
+            </div>
+            {% endfor %}
+
+            <div class="announcement-form">
+                <label for="announcement">Add an Announcement:</label>
+                <textarea id="announcement" rows="4" name="announcement" placeholder="Type your announcement here"></textarea>
+                <button id="submit-button">POST</button>
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
+
+{% endblock %}

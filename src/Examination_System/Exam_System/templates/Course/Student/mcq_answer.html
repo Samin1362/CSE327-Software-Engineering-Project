@@ -1,0 +1,101 @@
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your head content here -->
+
+    <style>
+
+        /* styles.css */
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Main content styles */
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* MCQ option styles */
+        .mcq-option {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Submit button styles */
+        .submit-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>MCQ Question </h1>
+    </header>
+    <main>
+        <section class="question">
+            <h2> {{ question.mcq_question }} </h2>
+            <form action="." method="post">
+                {% csrf_token %}
+                <!-- MCQ question and options -->
+                <label for="mcq-option-a">
+                    <input type="radio" id="mcq-option-a" name="mcq-answer" value="a">
+                    a) Option A
+                </label>
+                <br>
+                <label for="mcq-option-b">
+                    <input type="radio" id="mcq-option-b" name="mcq-answer" value="b">
+                    b) Option B
+                </label>
+                <br>
+                <label for="mcq-option-c">
+                    <input type="radio" id="mcq-option-c" name="mcq-answer" value="c">
+                    c) Option C
+                </label>
+                <br>
+                <label for="mcq-option-d">
+                    <input type="radio" id="mcq-option-d" name="mcq-answer" value="d">
+                    d) Option D
+                </label>
+                <br>
+                <button type="submit">Submit MCQ Answer</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
+{% endblock %}
