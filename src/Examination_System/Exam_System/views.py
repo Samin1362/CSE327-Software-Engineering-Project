@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from Exam_System.models import Student, ComputerScience
 import pyaudio, wave, time
 from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
@@ -25,8 +26,8 @@ def login(request, *args, **kwargs):
                 check = authenticate(username=username_, password=password_)
 
                 if check is not None:
-                    url = reverse("homeStudent") 
-                    return redirect(url, "?data" + username_)
+                    url = 'homeStudent/?output={}'.format(username_)
+                    return HttpResponseRedirect(url)
                 else:
                     messages.error(request, "Invalid Credentials")
                     return render(request, "Authentication/login.html", {})
@@ -82,19 +83,20 @@ def signup(request, *args, **kwargs):
 
 def homeStudent(request):
 
-    received_data = request.GET.get("data", "")
+    username = request.GET.get('output')
 
-    print(received_data)
+    if request.method == 'POST':
+        action = request.POST.get('View')
+        username_ = request.POST.get('output')
 
-    # if request.method == 'POST':
-    #     action = request.POST.get('View')
-
-    #     if action == 'View':
-    #         return redirect('studentCourse')
-    #     else:
-    #         return render(request, 'Authentication/home_Student.html', {})
-    
-    return render(request, 'Authentication/home_Student.html', {})
+        if action == 'View':
+            print(username_)
+            url = 'studentCourse/?output={}'.format(username_)
+            return HttpResponseRedirect(url)
+        else:
+            return render(request, 'Authentication/home_Student.html', {})
+        
+    return render(request, 'Authentication/home_Student.html', {'username_':username})
 
 def homeFaculty(request):
 
@@ -237,9 +239,13 @@ def facultyAssignments(request):
     
 def studentCourse(request):
 
+    username = request.GET.get('output')
+
+
     if request.method == 'POST':
 
         action = request.POST['action']
+        username_ = request.POST.get('output')
 
         if action == 'Students':
             return redirect('viewStudent')
@@ -248,9 +254,10 @@ def studentCourse(request):
         elif action == 'Assignment':
             return redirect('studentAssignment')
         else:
-            return redirect('homeFaculty')
+            url = 'marks/?output={}'.format(username_)
+            return HttpResponseRedirect(url)
 
-    return render(request, 'Course/Student/studentCourse.html', {})    
+    return render(request, 'Course/Student/studentCourse.html', {'username_':username})    
 
 def studentAnnouncements(request):
 
@@ -330,18 +337,10 @@ def studentAssignment(request):
 
     return render(request, 'Course/Student/assignment.html', context)
 
-
-# def homeStudent(request):
-
-#     if request.method == 'POST':
-#         action = request.POST.get('View')
-
-#         if action == 'View':
-#             return redirect('studentCourse') 
-#         else:
-#             return render(request, 'Authentication/home_Student.html', {})
-    
-#     return render(request, 'Authentication/home_Student.html', {})
+def marks(request):
+    username_ = request.GET.get('output')
+    student = ComputerScience.objects.get(student_name = username_)
+    return render(request, "Course/Student/marks.html", {'student':student})
 
 
 

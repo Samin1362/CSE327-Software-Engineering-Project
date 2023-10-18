@@ -71,6 +71,7 @@
     <form action="." method="POST"> {% csrf_token %}
         <nav class="sidenav">
             <div class="sidenav-title">Student Course</div>
+            <input type="hidden" name="output" value="{{ username_ }}">
             <ul class="sidenav-list">
                 <li><input type="submit" name="action" value="Announcements"></li>
                 <li><input type="submit" name="action" value="Students"></li>

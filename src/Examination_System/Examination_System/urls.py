@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 #For Exam System
-from Exam_System.views import login, signup, homeFaculty, homeStudent, facultyCourse, addStudent, facultyAnnouncements, facultyAssignments, studentCourse, studentAnnouncements, viewStudent, studentAssignment
+from Exam_System.views import login, signup, homeFaculty, homeStudent, facultyCourse, addStudent, facultyAnnouncements, facultyAssignments, studentCourse, studentAnnouncements, viewStudent, studentAssignment, marks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,16 +29,17 @@ urlpatterns = [
     #For Exam System
     path('login/', login, name='login'),
     path('signup/', signup, name='signup'),
-    path('homeStudent/', homeStudent, name='homeStudent'),
+    path('login/homeStudent/', homeStudent, name='homeStudent'),
     path('homeFaculty/', homeFaculty, name='homeFaculty'),
     path('facultyCourse/', facultyCourse, name='facultyCourse'), 
     path('addStudent/', addStudent, name='addStudent'),    
     path('announcements/', facultyAnnouncements, name='announcements'),    
     path('facultyAssignments/', facultyAssignments, name='facultyAssignments'),   
-    path('studentCourse/', studentCourse, name='studentCourse'),   
+    path('login/homeStudent/studentCourse/', studentCourse, name='studentCourse'),   
     path('studentAnnouncements/', studentAnnouncements, name='studentAnnouncements'),   
     path('viewStudent/', viewStudent, name='viewStudent'),  
-    path('studentAssignment/', studentAssignment, name='studentAssignment'),  
+    path('studentAssignment/', studentAssignment, name='studentAssignment'), 
+    path('login/homeStudent/studentCourse/marks/', marks, name='marks'),  
 
 ]
 

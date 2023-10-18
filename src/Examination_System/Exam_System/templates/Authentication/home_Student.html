@@ -52,6 +52,8 @@
         <form action="." method="POST"> {% csrf_token %}
 
             <h2 class="cohort-title">Student Cohort</h2>
+
+            <input type="hidden" name="output" value="{{ username_ }}">
         
             <ul class="course-list">
                 <li class="course-list-item">Course 1: Introduction to Computer Science <input class="course-button" type="submit" name="View" value="View"></li>
