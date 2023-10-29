@@ -185,7 +185,8 @@ def facultyAnnouncements(request):
 
 def facultyAssignments(request):
 
-    user = ComputerScience.objects.get(id = 3)
+    user = ComputerScience.objects.get(id = 1)
+    print(user.student_name)
     mcq_question = user.mcq_question
     option1 = user.option_1
     option2 = user.option_2
@@ -201,6 +202,9 @@ def facultyAssignments(request):
 
     voice_question = user.voice_question
     voice_answer = user.voice_answer
+
+    #For Json file
+
 
 
     
@@ -230,7 +234,7 @@ def facultyAssignments(request):
         count_for_voice = request.POST.get('hidden_voice_question_count')
 
         #Accessing the database
-        user = ComputerScience.objects.get(id=3)
+        user = ComputerScience.objects.get(id=1)
         mcq_question = user.mcq_question
         option1 = user.option_1
         option2 = user.option_2
@@ -357,7 +361,7 @@ def studentAssignment(request):
 
     username_ = request.GET.get('output')
 
-    question_ = ComputerScience.objects.get(id = 3)
+    question_ = ComputerScience.objects.get(id = 1)
     mcq_questions = question_.mcq_question
     options = [question_.option_1, question_.option_2, question_.option_3, question_.option_4]
     
@@ -390,21 +394,26 @@ def studentAssignment(request):
         mcq_questions = question.mcq_question
         options = [question.option_1, question.option_2, question.option_3, question.option_4]
 
-        initial_marks_mcq = question.mcq_marks
-        if question.number_of_mcq != 0:
-            marks_for_each_mcq = float(initial_marks_mcq) / float(question.number_of_mcq)
+        marks_for_each_mcq = 0
+        marks_for_each_short = 0
+        marks_for_each_broad = 0
+        marks_for_each_voice = 0
 
-        initial_marks_short = question.short_marks
-        if question.number_of_short != 0:
-            marks_for_each_short = float(initial_marks_short) / float(question.number_of_short)
+        initial_marks_mcq = question_.mcq_marks
+        if question_.number_of_mcq != 0:
+            marks_for_each_mcq = float(initial_marks_mcq) / float(question_.number_of_mcq)
 
-        initial_marks_broad = question.broad_marks
-        if question.number_of_broad != 0:
-            marks_for_each_broad = float(initial_marks_broad) / float(question.number_of_broad)
+        initial_marks_short = question_.short_marks
+        if question_.number_of_short != 0:
+            marks_for_each_short = float(initial_marks_short) / float(question_.number_of_short)
+
+        initial_marks_broad = question_.broad_marks
+        if question_.number_of_broad != 0:
+            marks_for_each_broad = float(initial_marks_broad) / float(question_.number_of_broad)
         
-        initial_marks_voice = question.voice_marks
-        if question.number_of_voice != 0:
-            marks_for_each_voice = float(initial_marks_voice) / float(question.number_of_voice)
+        initial_marks_voice = question_.voice_marks
+        if question_.number_of_voice != 0:
+            marks_for_each_voice = float(initial_marks_voice) / float(question_.number_of_voice)
         
 
         # context = {
@@ -422,10 +431,10 @@ def studentAssignment(request):
         mark_achived_broad = 0
         mark_achived_voice = 0
 
-        no_of_mcq = question.number_of_mcq
-        no_of_short = question.number_of_short
-        no_of_broad = question.number_of_broad
-        no_of_voice = question.number_of_voice
+        no_of_mcq = question_.number_of_mcq
+        no_of_short = question_.number_of_short
+        no_of_broad = question_.number_of_broad
+        no_of_voice = question_.number_of_voice
 
         input_mcq_answer = []
         input_short_answer = []
@@ -444,8 +453,6 @@ def studentAssignment(request):
             if ratio == 100:
                 mark_achived_mcq += marks_for_each_mcq
             index += 1
-
-        print(mark_achived_mcq)
 
 
         #For short question 
@@ -504,9 +511,15 @@ def studentAssignment(request):
                 ratio_percantage = 0
             index += 1
         
+        question.mcq_marks = mark_achived_mcq
+        question.short_marks = mark_achived_short
+        question.broad_marks = mark_achived_broad
+        question.voice_marks = mark_achived_voice
+
+        print(mark_achived_mcq)
+
 
         #Setting marks 
-        print(mark_achived_mcq)
         question.student_marks = mark_achived_mcq + mark_achived_short + mark_achived_broad + mark_achived_voice
         question.save()
 

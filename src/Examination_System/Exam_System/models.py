@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -16,21 +15,21 @@ class ComputerScience(models.Model):
     student_marks = models.DecimalField(max_digits=100, decimal_places=2)
     announcement = models.TextField(default='Add Announcement')
 
-    mcq_question = ArrayField(models.TextField(), default=list, blank=True)
-    option_1 = ArrayField(models.CharField(max_length=150, default='Enter'), default=list, blank=True)
-    option_2 = ArrayField(models.CharField(max_length=150, default='Enter'), default=list, blank=True)
-    option_3 = ArrayField(models.CharField(max_length=150, default='Enter'), default=list, blank=True)
-    option_4 = ArrayField(models.CharField(max_length=150, default='Enter'), default=list, blank=True)
-    mcq_answer = ArrayField(models.CharField(max_length=150, default='Enter'), default=list, blank=True)
+    mcq_question = models.JSONField(default=list, blank=True)
+    option_1 = models.JSONField(default=list, blank=True)
+    option_2 = models.JSONField(default=list, blank=True)
+    option_3 = models.JSONField(default=list, blank=True)
+    option_4 = models.JSONField(default=list, blank=True)
+    mcq_answer = models.JSONField(default=list, blank=True)
 
-    short_question = ArrayField(models.TextField(), default=list, blank=True)
-    short_answer = ArrayField(models.TextField(), default=list, blank=True)
+    short_question = models.JSONField(default=list, blank=True)
+    short_answer = models.JSONField(default=list, blank=True)
 
-    broad_question = ArrayField(models.TextField(), default=list, blank=True)
-    broad_answer = ArrayField(models.TextField(), default=list, blank=True)
+    broad_question = models.JSONField(default=list, blank=True)
+    broad_answer = models.JSONField(default=list, blank=True)
     
-    voice_question = ArrayField(models.TextField(), default=list, blank=True)
-    voice_answer = ArrayField(models.TextField(), default=list, blank=True)
+    voice_question = models.JSONField(default=list, blank=True)
+    voice_answer = models.JSONField(default=list, blank=True)
 
     exam_duration = models.IntegerField(default=0)
 

@@ -25,7 +25,7 @@ function startWebcam() {
 }
 
 function getLabeledFaceDescriptions() {
-    const labels = ["Samin"];
+    const labels = ["Samin", "Masum", "Parvez"];
     return Promise.all(
         labels.map(async (label) => {
             const descriptions = [];
@@ -72,7 +72,7 @@ async function faceRecognition() {
                     unknownFaceTime += (currentTime - lastUpdateTime); // Update unknown time
                     count += 1;
                 }
-                new faceapi.draw.DrawBox(box, { label: count.toString() }).draw(overlayCanvas);
+                new faceapi.draw.DrawBox(box, { label: result.toString() }).draw(overlayCanvas);
             });
 
             lastUpdateTime = currentTime; // Update last update time
@@ -84,7 +84,7 @@ async function faceRecognition() {
 function updateUnknownFacePercentage() {
     const currentTime = Date.now();
     const totalTime = currentTime - lastUpdateTime; // Update total time
-    const unknownPercentage = ((unknownFaceTime/1000) / totalTime) * 100 ;
+    const unknownPercentage = ((unknownFaceTime / 1000) / totalTime) * 100;
     document.getElementById('unknown-face-percentage').innerText = `Unknown face percentage: ${unknownPercentage.toFixed(2)}%`;
     document.getElementById('unknown-face-percentage_').value = unknownPercentage.toFixed(2)
 
