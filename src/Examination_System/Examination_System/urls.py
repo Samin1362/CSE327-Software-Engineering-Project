@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 #For Exam System
-from Exam_System.views import login, signup, homeFaculty, homeStudent, facultyCourse, addStudent, facultyAnnouncements, facultyAssignments, studentCourse, studentAnnouncements, viewStudent, studentAssignment, marks
+from Exam_System.views import login, signup, homeFaculty, homeStudent, facultyCourse, addStudent, facultyAnnouncements, facultyAssignments, studentCourse, studentAnnouncements, viewStudent, studentAssignment, marks, test
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,8 +38,9 @@ urlpatterns = [
     path('login/homeStudent/studentCourse/', studentCourse, name='studentCourse'),   
     path('studentAnnouncements/', studentAnnouncements, name='studentAnnouncements'),   
     path('viewStudent/', viewStudent, name='viewStudent'),  
-    path('studentAssignment/', studentAssignment, name='studentAssignment'), 
-    path('login/homeStudent/studentCourse/marks/', marks, name='marks'),  
+    path('login/homeStudent/studentCourse/studentAssignment/', studentAssignment, name='studentAssignment'), 
+    path('login/homeStudent/studentCourse/marks/', marks, name='marks'), 
+    path('test/', test, name='test'),  
 
 ]
 

@@ -1,20 +1,13 @@
-{% block content %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Answers</title>
-
+    <title>Questions</title>
     <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* Common styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -22,18 +15,7 @@
             padding: 0;
         }
 
-        header {
-            background-color: #007BFF;
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 28px;
-        }
-
-        main {
+        .container {
             max-width: 800px;
             margin: 20px auto;
             background-color: #fff;
@@ -42,178 +24,422 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .question-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
         .question {
-            margin-top: 20px;
-        }
-
-        h2 {
-            font-size: 20px;
+            font-weight: bold;
             margin-bottom: 10px;
         }
 
-        form {
-            margin-top: 10px;
-        }
-
-        p {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"], textarea {
+        .answer-input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Style the voice recording buttons */
-        #record-button, #stop-button {
-            display: block;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
             margin-top: 10px;
         }
 
-        #stop-button {
-            background-color: #ff3333;
+        .submit-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
         }
 
-        h3 {
-            color: rgb(67, 122, 12);
+        .submit-button:hover {
+            background-color: #0056b3;
         }
+
+        /* Section headings */
+        .section-heading {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Recording section styles */
+        .recording-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .record-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .record-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .record-button-1 {
+            background-color: orange;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .record-button-2 {
+            background-color: red;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .record-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Audio player styles */
+        .audio-player {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .Recommended{
+            color: green;
+        }
+
+        /* Your existing CSS styles */
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            /* Other container styles */
+        }
+
+        .video-container {
+            position: relative;
+            width: 600px; /* Adjust based on your video width */
+            height: 450px; /* Adjust based on your video height */
+            margin: 0 auto;
+        }
+
+        video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #overlayCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
 
 
     </style>
-
 </head>
 <body>
-    <header>
-        <h1>Student Answers</h1>
-    </header>
 
-    <main>
+    <p id="unknown-face-percentage"></p>
+    <p>Tab Change Counter: <span id="counter">0</span></p>
 
-        <aside class="sidebar">
-            <div class="timer">
-                <h2>Time Remaining</h2>
-                <div id="timer">60:00</div>
+    <div class="container">
+
+        <div class="container">
+            <div class="video-container">
+                <video id="video" autoplay></video>
+                <canvas id="overlayCanvas"></canvas>
             </div>
-        </aside>
+        </div>
 
-        <form action="." method="POST"> {% csrf_token %}
+        <h1>Questions</h1>
 
-            <section class="question">
-                <h2>Enter Email</h2>
-                    <input name="email" type="text" id="email" placeholder="Your Answer">
-                    <!-- <button type="button">Submit Short Answer</button> -->
+        <!-- For timer -->
+        <h3>Timer</h3>
+        <div id="timer"></div>
 
-            </section>
-            
+        <form action="." method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-            <section class="question">
-                <h2>Multiple Choice Question (MCQ)</h2>
+            <input type="hidden" name="username" value="{{ username }}">
+            <input type="hidden" id="tab_changed_counter" name="tab_changed_counter" value="0">
+            <input type="hidden" id="unknown-face-percentage_" name="unknown_face_percentage_" value="0">
 
-                    <p>Question: {{ question.mcq_question }}</p>
-                    <input type="radio" id="mcq-option-a" name="mcq_answer" value="A">
-                    <label for="mcq-option-a">a) {{ question.option_1 }}</label>
-                    <br>
-                    <input type="radio" id="mcq-option-b" name="mcq_answer" value="B">
-                    <label for="mcq-option-b">b) {{ question.option_2 }}</label>
-                    <br>
-                    <input type="radio" id="mcq-option-c" name="mcq_answer" value="C">
-                    <label for="mcq-option-c">c) {{ question.option_3 }}</label>
-                    <br>
-                    <input type="radio" id="mcq-option-d" name="mcq_answer" value="D">
-                    <label for="mcq-option-d">d) {{ question.option_4 }}</label>
-                    <br>
-                    <!-- <button type="button">Submit MCQ Answer</button> -->
+            <!-- MCQ Questions -->
+            <div class="section-heading">MCQ Questions</div>
+            {% for mcq, option_1, option_2, option_3, option_4 in mcq_data %}
+            <div class="question-item">
+                <p class="question">{{ mcq }}</p>
+                <ul class="mcq-options">
+                    <li>{{ option_1 }}</li>
+                    <li>{{ option_2 }}</li>
+                    <li>{{ option_3 }}</li>
+                    <li>{{ option_4 }}</li>
+                </ul>
+                <div class="mcq-input">
+                    <label for="mcq_{{ forloop.counter }}">Your Answer:</label>
+                    <input type="radio" id="mcq_{{ forloop.counter }}" name="mcq_{{ forloop.counter }}" value="A"> A
+                    <input type="radio" name="mcq_{{ forloop.counter }}" value="B"> B
+                    <input type="radio" name="mcq_{{ forloop.counter }}" value="C"> C
+                    <input type="radio" name="mcq_{{ forloop.counter }}" value="D"> D
+                </div>
+            </div>
+            {% endfor %}
 
-            </section>
-    
-            <section class="question">
-                <h2>Short Question</h2>
+            <!-- Short Questions -->
+            <div class="section-heading">Short Questions</div>
+            {% for short_q in short_questions %}
+            <div class="question-item">
+                <p class="question">{{ short_q }}</p>
+                <div class="short-input">
+                    <label for="short_answer_{{ forloop.counter }}">Your Answer:</label>
+                    <input type="text" id="short_answer_{{ forloop.counter }}" name="short_answer_{{ forloop.counter }}">
+                </div>
+            </div>
+            {% endfor %}
 
-                    <p>Question: {{ question.short_question }}</p>
-                    <input name="short-answer" type="text" id="short-answer" placeholder="Your Answer">
-                    <!-- <button type="button">Submit Short Answer</button> -->
+            <!-- Broad Questions -->
+            <div class="section-heading">Broad Questions</div>
+            {% for broad_q in broad_questions %}
+            <div class="question-item">
+                <p class="question">{{ broad_q }}</p>
+                <div class="broad-textarea">
+                    <label for="broad_answer_{{ forloop.counter }}">Your Answer:</label>
+                    <textarea id="broad_answer_{{ forloop.counter }}" name="broad_answer_{{ forloop.counter }}" rows="4" cols="50"></textarea>
+                </div>
+            </div>
+            {% endfor %}
 
-            </section>
-    
-            <section class="question">
-                <h2>Broad Question</h2>
+            <!-- Voice Questions -->
+            <div class="section-heading">Voice Questions</div>
+            {% for voice_q in voice_questions %}
+            <div class="question-item">
+                <p class="question">{{ voice_q }}</p>
+                <div class="voice-input">
+                    <label for="voice_answer_{{ forloop.counter }}">Your Answer:</label>
+                    <textarea id="voice_answer_{{ forloop.counter }}" name="voice_answer_{{ forloop.counter }}" rows="4" cols="50"></textarea>
+                    <br><h3>OR Upload a Audio File</h3><label for="audioInput">Upload Your Answer:</label>
+                    <input name="voice_input" type="file" accept="audio/*" id="audioInput" multiple>
+                </div>
+            </div>
+            {% endfor %}
 
-                    <p>Question: {{ question.broad_question }}</p>
-                    <textarea name="broad-answer" id="broad-answer" rows="4" placeholder="Your Answer"></textarea>
-                    <!-- <button type="button">Submit Broad Answer</button> -->
-
-            </section>
-    
-            <section class="question">
-                <h2>Voice-Based Question</h2>
-
-                    <h3>After clicking the submit button you will have 1 minutes to answer the voice based question</h3> <br>
-                    <h3>You must click the submit button 1 minute before the remaining time.</h3> <br>
-                    <p>Question: {{ question.voice_question }}</p>
-                    <button type="submit" id="record-button">Submit Answer</button>
-                    <!-- <button type="button" id="stop-button">Stop Recording</button> -->
- 
-            </section>
+            <button type="submit" class="submit-button" id="submitButton">Submit Answers</button>
         </form>
 
-    
-        <script>
-            var timerDisplay = document.getElementById('timer');
-            var examDuration = "{{ question.exam_duration }}"; // Get the exam duration from the Django context in second
-            var timer = examDuration;
-            
-            function updateTimer() {
-                var minutes = Math.floor(timer / 60);
-                var seconds = timer % 60;
-                
-                // Display the time remaining
-                timerDisplay.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-                
-                if (timer <= 0) {
-                    // Handle the timer expiration (e.g., submit the exam)
-                    alert("Time's up! Your exam has been submitted.");
-                } else {
-                    timer--;
-                    setTimeout(updateTimer, 1000); // Update the timer every second
-                }
-            }
-            
-            updateTimer(); // Start the timer
-        </script>
+        <!-- Audio Translate -->
+        <div class="Recommended"><h1>Speech To Text</h1></div>
+        <div class="recording-section">
+            <div class="record-buttons">
+                <button id="startButton" class="record-button-1">Start Listening</button>
+                <button id="stopButton" class="record-button-2" style="display: none;">Stop Recording</button>
+                <button id="copyButton" class="record-button" style="display: none;">Copy</button>
+                <p id="result"></p>
+            </div>
+        </div>
 
-    </main>
+        <h3>Or you can Record Audio file and upload.</h1>
+        <div class="Recommended">
+            <h3> Recommended to use the first option that will be more accurate.</h1>
+        </div>
+        
+
+        <!-- Audio Recording -->
+        <div class="section-heading">Audio Recording</div>
+        <div class="recording-section">
+            <div class="record-buttons">
+                <button id="startRecording" class="record-button">Start Recording</button>
+                <button id="stopRecording" class="record-button" disabled>Stop Recording</button>
+            </div>
+            <audio id="audioPlayer" controls ></audio>
+        </div>
+
+    </div>
+
+    <script>
+        // Set the date and time to count down to (in this example, it's 10 seconds from now)
+        const examDuration = {{ exam_duration }} * 1000;
+        const countDownDate = new Date().getTime() + examDuration; // 10 seconds in milliseconds
+
+        // Update the countdown timer every second
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            if (distance <= 0) {
+                clearInterval(x); // Timer expired
+                document.getElementById("timer").innerHTML = "Time's up!";
+                // Redirect to a different page when the timer expires
+                window.location.href = "http://127.0.0.1:8000/login/homeStudent/studentCourse/" ; // Change the URL to your desired page
+                // Automatically click the submit button
+                document.getElementById("submitButton").click();
+            } else {
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById("timer").innerHTML = `${minutes}m ${seconds}s`;
+            }
+        }, 1000); // Update every 1 second
+    </script>
+
+    <script>
+        const audioInput = document.getElementById("audioInput");
+        const audioPlayer = document.getElementById("audioPlayer");
+
+        audioInput.addEventListener("change", function () {
+            const file = audioInput.files[0];
+
+            if (file) {
+                const objectURL = URL.createObjectURL(file);
+                audioPlayer.src = objectURL;
+                audioPlayer.style display = "block"; // Fixed the typo
+            } else {
+                audioPlayer.src = "";
+                audioPlayer.style.display = "none";
+            }
+        });
+    </script>
+
+    <script>
+        const startRecordingButton = document.getElementById("startRecording");
+        const stopRecordingButton = document.getElementById("stopRecording");
+        const audioPlayer = document.getElementById("audioPlayer");
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // Start recording audio
+        startRecordingButton.addEventListener("click", () => {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function (stream) {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = function (event) {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = function () {
+                        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPlayer.src = audioUrl;
+                    };
+
+                    mediaRecorder.start();
+                    startRecordingButton.disabled = true;
+                    stopRecordingButton.disabled = false;
+                })
+                .catch(function (error) {
+                    console.error("Error accessing microphone:", error);
+                });
+        });
+
+        // Stop recording audio
+        stopRecordingButton.addEventListener("click", () => {
+            mediaRecorder.stop();
+            startRecordingButton.disabled = false;
+            stopRecordingButton.disabled = true;
+        });
+    </script>
+
+    <script>
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            const resultElement = document.getElementById('result');
+            const startButton = document.getElementById('startButton');
+            const stopButton = document.getElementById('stopButton');
+            const copyButton = document.getElementById('copyButton');
+
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onstart = function () {
+                startButton.style.display = 'none';
+                stopButton.style.display = 'inline';
+                copyButton.style.display = 'none';
+            };
+
+            recognition.onresult = function (event) {
+                const result = event.results[event.resultIndex];
+                const transcript = result[0].transcript;
+                resultElement.textContent = transcript;
+            };
+
+            recognition.onend = function () {
+                startButton.style.display = 'inline';
+                stopButton.style.display = 'none'; // Fixed the typo
+                copyButton.style.display = 'inline';
+            };
+
+            startButton.addEventListener('click', function () {
+                recognition.start();
+            });
+
+            stopButton.addEventListener('click', function () {
+                recognition.stop();
+            });
+
+            copyButton.addEventListener('click', function () {
+                const textToCopy = resultElement.textContent;
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            });
+        } else {
+            alert('Web Speech API is not supported in this browser.');
+        }
+    </script>
+
+    <script defer src="{% static 'js/face-api.min.js' %}"></script>
+    <script defer src="{% static 'js/script.js' %}"></script>
+
+    
+    <script>
+        let counter = 0;
+
+        // Function to update the counter and show alert
+        function tabChanged() {
+            counter++;
+            document.getElementById('counter').innerText = counter;
+            document.getElementById('tab_changed_counter').value = counter;
+
+            // Playing an alert sound (might not autoplay due to browser policies)
+            let audio = new Audio("{% static 'music/alert.mp3' %}");
+            audio.play();
+        }
+
+        // Adding event listener for visibility change
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'hidden') {
+                tabChanged();
+                alert('Tab Changed');
+            }
+        });
+    </script>
+
+
 </body>
 </html>
-
-
-{% endblock %}

@@ -4,21 +4,25 @@
     <title>Student Cohort</title>
     <style>
         body {
+            background-image: url('/static/images/1.png');
+            background-size: cover; /* Stretch the background image */
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: rgba(255, 255, 255, 0.9); /* Decrease transparency */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
+
         .cohort-card {
             width: 400px;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9); /* Make the cohort-card transparent */
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
+
 
         .cohort-title {
             font-size: 24px;
@@ -44,27 +48,55 @@
             padding: 5px 10px;
             cursor: pointer;
         }
+
+        .input-text {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="cohort-card">
-
         <form action="." method="POST"> {% csrf_token %}
 
+            <input type="hidden" name="output" value="{{ username_ }}">
             <h2 class="cohort-title">Student Cohort</h2>
 
-            <input type="hidden" name="output" value="{{ username_ }}">
-        
             <ul class="course-list">
                 <li class="course-list-item">Course 1: Introduction to Computer Science <input class="course-button" type="submit" name="View" value="View"></li>
-                <li class="course-list-item">Course 2: Economics <input class="course-button" type="button" value="Invalid"></li>
-                <li class="course-list-item">Course 3: EEE111 <input class="course-button" type="button" value="Invalid"></li>
-                <li class="course-list-item">Course 4: Biology <input class="course-button" type="button" value="Invalid"></li>
+                <li class="course-list-item">Course 2: Web Development Fundamentals <input class="course-button" type="button" value="Invalid"></li>
+                <li class="course-list-item">Course 3: Data Structures and Algorithms <input class="course-button" type="button" value="Invalid"></li>
+                <li class="course-list-item">Course 4: Database Management <input class="course-button" type="button" value="Invalid"></li>
                 <!-- Add more courses with buttons as needed -->
             </ul>
-        </form>
 
-    
+            <!-- <div id="new-course">
+                <input class="input-text" type="text" id="new-course-input" placeholder="Enter new course name">
+                <input class="course-button" type="button" value="Add Course" onclick="addNewCourse()">
+            </div> -->
+        </form>
     </div>
+
+    <script>
+        const newCourseItem = document.getElementById("new-course");
+        const newCourseInput = document.getElementById("new-course-input");
+        const courseList = document.querySelector(".course-list");
+
+        function addNewCourse() {
+            const courseName = newCourseInput.value;
+            if (courseName.trim() !== "") {
+                const courseNumber = courseList.childElementCount + 1;
+                const newCourseListItem = document.createElement("li");
+                newCourseListItem.className = "course-list-item";
+                newCourseListItem.innerHTML = `Course ${courseNumber}: ${courseName} <input class="course-button" type="button" value="Invalid">`;
+                courseList.appendChild(newCourseListItem);
+
+                newCourseInput.value = "";
+            }
+        }
+    </script>
 </body>
 </html>

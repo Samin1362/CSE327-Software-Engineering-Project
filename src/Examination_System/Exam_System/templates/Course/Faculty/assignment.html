@@ -1,15 +1,11 @@
-{% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Creation Page</title>
-    <link rel="stylesheet" href="styles.css">
 
     <style>
-
         /* Reset default margin and padding */
         * {
             margin: 0;
@@ -58,14 +54,7 @@
             width: 100%;
         }
 
-        textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        input[type="text"] {
+        textarea, input[type="text"] {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -87,91 +76,242 @@
         }
 
         .alert-success {
-        background-color: #28a745;
-        color: #fff;
+            background-color: #28a745;
+            color: #fff;
         }
 
+        .mcq-option {
+            display: flex;
+        }
 
+        .mcq-option input {
+            flex: 1;
+            margin-right: 5px;
+        }
+
+        .mcq-option button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .mcq-option button:hover {
+            background-color: #c82333;
+        }
+
+        /* Style the submit button */
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
     </style>
-
 </head>
 <body>
     <header>
         <h1>Create Questions</h1>
-
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-danger" role="alert">
-            <strong>Message:</strong> {{ message }}<br><br>
-        </div>
-        {% endfor %}
-
     </header>
 
     <form action="." method="POST"> {% csrf_token %}
 
         <section class="question-type">
-            <h2>Set Exam Duration</h2>
-                <input name="exam_duration" type="text" id="short-answer" placeholder="Enter time in seconds ">      
+            <h2>Set Exam Duration: </h2>
+            <textarea name="Exam_Duration" rows="3" placeholder="Enter Duration in Seconds"></textarea>
         </section>
 
+        <section class="question-type">
+            <h2>Multiple Choice Questions (MCQ)</h2>
+            <p id="mcq-question-count">Number of Questions: 0</p>
+            <input type="hidden" name="hidden_mcq_question_count" id="hidden-mcq-question-count" value="0">
+            <div id="mcq-questions-container">
+
+            </div>
+            <button type="button" id="add-mcq-question">Add MCQ Question</button>
+        </section>
 
         <section class="question-type">
-            <h2>Multiple Choice Question (MCQ)</h2>
-            <!-- <form action="." method="POST"> {% csrf_token %} -->
-    
-                <label for="mcq-question">Question:</label>
-                <textarea name="mcq_question" id="mcq-question" rows="3" placeholder="Enter your MCQ question here"></textarea>
-                <label for="mcq-options">Options:</label>
-                <input name="option1" type="text" id="mcq-option-1" placeholder="Option 1">
-                <input name="option2" type="text" id="mcq-option-2" placeholder="Option 2">
-                <input name="option3" type="text" id="mcq-option-3" placeholder="Option 3">
-                <input name="option4" type="text" id="mcq-option-4" placeholder="Option 4">
-                <label for="mcq-answer">Correct Answer:</label>
-                <input name="mcq_answer" type="text" id="mcq-answer" placeholder="Correct option (e.g., A)">
-                
-            <!-- </form> -->
-        </section>
-    
-        <section class="question-type">
-            <h2>Short Question</h2>
-            <!-- <form action="." method="POST"> {% csrf_token %} -->
-    
-                <label for="short-question">Question:</label>
-                <textarea name="short_question" id="short-question" rows="3" placeholder="Enter your short question here"></textarea>
-                <label for="short-answer">Correct Answer (keywords):</label>
-                <input name="short_answer" type="text" id="short-answer" placeholder="Correct answer ">
-                
-            <!-- </form> -->
-        </section>
-    
-        <section class="question-type">
-            <h2>Broad Question</h2>
-            <!-- <form action="." method="POST"> {% csrf_token %} -->
-                <label for="broad-question">Question:</label>
-                <textarea name="broad_question" id="broad-question" rows="3" placeholder="Enter your broad question here"></textarea>
-                <label for="broad-answer">Correct Answer (keywords):</label>
-                <input name="broad_answer" type="text" id="broad-answer" placeholder="Correct answer ">
-        
-            <!-- </form> -->
-        </section>
-    
-        <section class="question-type">
-            <h2>Voice-Based Question</h2>
-            <!-- <form action="." method="POST"> {% csrf_token %} -->
-                <label for="voice-question">Question:</label>
-                <textarea name="voice_question" id="voice-question" rows="3" placeholder="Record your voice-based question"></textarea>
-                <label for="voice-answer">Correct Answer (keywords):</label>
-                <input name="voice_answer" type="text" id="voice-answer" placeholder="Correct answer">
-
-                <button type="submit-button">Add Questions</button>
-            <!-- </form> -->
+            <h2>Short Questions</h2>
+            <p id="short-question-count">Number of Questions: 0</p>
+            <input type="hidden" name="hidden_short_question_count" id="hidden-short-question-count" value="0">
+            <div id="short-questions-container"></div>
+            <button type="button" id="add-short-question">Add Short Question</button>
         </section>
 
+        <section class="question-type">
+            <h2>Broad Questions</h2>
+            <p id="broad-question-count">Number of Questions: 0</p>
+            <input type="hidden" name="hidden_broad_question_count" id="hidden-broad-question-count" value="0">
+            <div id="broad-questions-container"></div>
+            <button type="button" id="add-broad-question">Add Broad Question</button>
+        </section>
+
+        <section class="question-type">
+            <h2>Voice-Based Questions</h2>
+            <p id="voice-question-count">Number of Questions: 0</p>
+            <input type="hidden" name="hidden_voice_question_count" id="hidden-voice-question-count" value="0">
+            <div id="voice-questions-container"></div>
+            <button type="button" id="add-voice-question">Add Voice-Based Question</button>
+        </section>
+
+        <input type="submit" name="Submit" value="Submit">
     </form>
 
+    <script>
+        let mcqQuestionCount = 0;
+        let shortQuestionCount = 0;
+        let broadQuestionCount = 0;
+        let voiceQuestionCount = 0;
 
+        const mcqQuestionsContainer = document.getElementById("mcq-questions-container");
+        const addMcqQuestionButton = document.getElementById("add-mcq-question");
+        const mcqQuestionCountElement = document.getElementById("mcq-question-count");
+        const hiddenMcqQuestionCountInput = document.getElementById("hidden-mcq-question-count");
+
+        const shortQuestionsContainer = document.getElementById("short-questions-container");
+        const addShortQuestionButton = document.getElementById("add-short-question");
+        const shortQuestionCountElement = document.getElementById("short-question-count");
+        const hiddenShortQuestionCountInput = document.getElementById("hidden-short-question-count");
+
+        const broadQuestionsContainer = document.getElementById("broad-questions-container");
+        const addBroadQuestionButton = document.getElementById("add-broad-question");
+        const broadQuestionCountElement = document.getElementById("broad-question-count");
+        const hiddenBroadQuestionCountInput = document.getElementById("hidden-broad-question-count");
+
+        const voiceQuestionsContainer = document.getElementById("voice-questions-container");
+        const addVoiceQuestionButton = document.getElementById("add-voice-question");
+        const voiceQuestionCountElement = document.getElementById("voice-question-count");
+        const hiddenVoiceQuestionCountInput = document.getElementById("hidden-voice-question-count");
+
+        addMcqQuestionButton.addEventListener("click", () => {
+            mcqQuestionCount++;
+            mcqQuestionCountElement.textContent = `Number of MCQ Questions: ${mcqQuestionCount}`;
+            hiddenMcqQuestionCountInput.value = mcqQuestionCount;
+
+            const newMcqQuestion = document.createElement("div");
+            newMcqQuestion.className = "mcq-question";
+            newMcqQuestion.innerHTML = `
+                <label for="mcq-question">Question:</label>
+                <textarea name="mcq_question_${mcqQuestionCount}" rows="3" placeholder="Enter your MCQ question here"></textarea>
+                <label for="mcq-options">Options:</label>
+                <div class="mcq-options-container">
+                    <div class="mcq-option">
+                        <input name="option${mcqQuestionCount}_1" type="text" placeholder="Option 1">
+                    </div>
+                    <div class="mcq-option">
+                        <input name="option${mcqQuestionCount}_2" type="text" placeholder="Option 2">
+                    </div>
+                    <div class="mcq-option">
+                        <input name="option${mcqQuestionCount}_3" type="text" placeholder="Option 3">
+                    </div>
+                    <div class="mcq-option">
+                        <input name="option${mcqQuestionCount}_4" type="text" placeholder="Option 4">
+                    </div>
+                </div>
+                <label for="mcq-answer">Correct Answer:</label>
+                <input name="mcq_answer_${mcqQuestionCount}" type="text" placeholder="Correct option (e.g., A)">
+            `;
+            mcqQuestionsContainer.appendChild(newMcqQuestion);
+
+            const removeButtons = newMcqQuestion.querySelectorAll(".remove-mcq-option");
+            removeButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    mcqQuestionCount--;
+                    mcqQuestionCountElement.textContent = `Number of MCQ Questions: ${mcqQuestionCount}`;
+                    hiddenMcqQuestionCountInput.value = mcqQuestionCount;
+                    newMcqQuestion.removeChild(button.parentElement);
+                });
+            });
+        });
+
+        addShortQuestionButton.addEventListener("click", () => {
+            shortQuestionCount++;
+            shortQuestionCountElement.textContent = `Number of Short Questions: ${shortQuestionCount}`;
+            hiddenShortQuestionCountInput.value = shortQuestionCount;
+
+            const newShortQuestion = document.createElement("div");
+            newShortQuestion.className = "short-question";
+            newShortQuestion.innerHTML = `
+                <label for="short-question">Question:</label>
+                <textarea name="short_question_${shortQuestionCount}" rows="3" placeholder="Enter your short question here"></textarea>
+                <label for="short-answer">Correct Answer:</label>
+                <input name="short_answer_${shortQuestionCount}" type="text" placeholder="Correct answer">
+            `;
+            shortQuestionsContainer.appendChild(newShortQuestion);
+
+            const removeButtons = newShortQuestion.querySelectorAll(".remove-short-question");
+            removeButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    shortQuestionCount--;
+                    shortQuestionCountElement.textContent = `Number of Short Questions: ${shortQuestionCount}`;
+                    hiddenShortQuestionCountInput.value = shortQuestionCount;
+                    newShortQuestion.removeChild(button.parentElement);
+                });
+            });
+        });
+
+        addBroadQuestionButton.addEventListener("click", () => {
+            broadQuestionCount++;
+            broadQuestionCountElement.textContent = `Number of Broad Questions: ${broadQuestionCount}`;
+            hiddenBroadQuestionCountInput.value = broadQuestionCount;
+
+            const newBroadQuestion = document.createElement("div");
+            newBroadQuestion.className = "broad-question";
+            newBroadQuestion.innerHTML = `
+                <label for="broad-question">Question:</label>
+                <textarea name="broad_question_${broadQuestionCount}" rows="3" placeholder="Enter your broad question here"></textarea>
+                <label for="broad-answer">Correct Answer:</label>
+                <input name="broad_answer_${broadQuestionCount}" type="text" placeholder="Correct answer">
+            `;
+            broadQuestionsContainer.appendChild(newBroadQuestion);
+
+            const removeButtons = newBroadQuestion.querySelectorAll(".remove-broad-question");
+            removeButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    broadQuestionCount--;
+                    broadQuestionCountElement.textContent = `Number of Broad Questions: ${broadQuestionCount}`;
+                    hiddenBroadQuestionCountInput.value = broadQuestionCount;
+                    newBroadQuestion.removeChild(button.parentElement);
+                });
+            });
+        });
+
+        addVoiceQuestionButton.addEventListener("click", () => {
+            voiceQuestionCount++;
+            voiceQuestionCountElement.textContent = `Number of Voice-Based Questions: ${voiceQuestionCount}`;
+            hiddenVoiceQuestionCountInput.value = voiceQuestionCount;
+
+            const newVoiceQuestion = document.createElement("div");
+            newVoiceQuestion.className = "voice-question";
+            newVoiceQuestion.innerHTML = `
+                <label for="voice-question">Question:</label>
+                <textarea name="voice_question_${voiceQuestionCount}" rows="3" placeholder="Enter your voice-based question here"></textarea>
+                <label for="voice-answer">Correct Answer:</label>
+                <input name="voice_answer_${voiceQuestionCount}" type="text" placeholder="Correct answer">
+            `;
+            voiceQuestionsContainer.appendChild(newVoiceQuestion);
+
+            const removeButtons = newVoiceQuestion.querySelectorAll(".remove-voice-question");
+            removeButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    voiceQuestionCount--;
+                    voiceQuestionCountElement.textContent = `Number of Voice-Based Questions: ${voiceQuestionCount}`;
+                    hiddenVoiceQuestionCountInput.value = voiceQuestionCount;
+                    newVoiceQuestion.removeChild(button.parentElement);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-
-
-{% endblock %}

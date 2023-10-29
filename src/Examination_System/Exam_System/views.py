@@ -6,6 +6,9 @@ from Exam_System.models import Student, ComputerScience
 import pyaudio, wave, time
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.core.files.storage import FileSystemStorage
+from pydub import AudioSegment
+from thefuzz import fuzz, process
 
 
 # Create your views here.
@@ -143,7 +146,7 @@ def addStudent(request):
 
             new_student = ComputerScience(
                 student_name=user.username,
-                student_id=3,
+                student_id=4,
                 student_email=user.email,
                 student_marks=0
             )
@@ -154,8 +157,8 @@ def addStudent(request):
 
             return  render(request, 'Course/Faculty/addStudent.html', {'students': students})
         
-        except:
-
+        except Exception as e:
+            print(e)
             messages.error(request, "Need Valid Email")
             return render(request, 'Course/Faculty/addStudent.html', {'students': students})
  
@@ -180,60 +183,138 @@ def facultyAnnouncements(request):
     
     return render(request, 'Course/Faculty/announcements.html', {})
 
-#Need to add many things
 def facultyAssignments(request):
 
+    user = ComputerScience.objects.get(id = 3)
+    mcq_question = user.mcq_question
+    option1 = user.option_1
+    option2 = user.option_2
+    option3 = user.option_3
+    option4 = user.option_4
+    mcq_answer = user.mcq_answer
+
+    short_question = user.short_question
+    short_question_answer = user.short_answer
+
+    broad_question = user.broad_question
+    broad_question_answer = user.broad_answer
+
+    voice_question = user.voice_question
+    voice_answer = user.voice_answer
+
+
+    
     if request.method == 'POST':
 
-        exam_duration_ = request.POST.get('exam_duration')
+        user.mcq_question = []
+        user.option_1 = []
+        user.option_2 = []
+        user.option_3 = []
+        user.option_4 = []
+        user.mcq_answer = []
 
-        mcq_question_ = request.POST.get('mcq_question')
+        user.short_question = []
+        user.short_answer = []
 
-        option_1 = request.POST.get('option1')
-        option_2 = request.POST.get('option2')
-        option_3 = request.POST.get('option3')
-        option_4 = request.POST.get('option4')
-        mcq_answer_ = request.POST.get('mcq_answer')
+        user.broad_question = []
+        user.broad_answer = []
 
-        short_question_ = request.POST.get('short_question')
-        short_answer_ = request.POST.get('short_answer')
+        user.voice_question = []
+        user.voice_answer = []
 
-        broad_question_ = request.POST.get('broad_question')
-        broad_answer_ = request.POST.get('broad_answer')
+        user.save()
 
-        voice_question_ = request.POST.get('voice_question')
-        voice_answer_ = request.POST.get('voice_answer')
+        count_for_mcq = request.POST.get('hidden_mcq_question_count')
+        count_for_short = request.POST.get('hidden_short_question_count')
+        count_for_broad = request.POST.get('hidden_broad_question_count')
+        count_for_voice = request.POST.get('hidden_voice_question_count')
 
+        #Accessing the database
+        user = ComputerScience.objects.get(id=3)
+        mcq_question = user.mcq_question
+        option1 = user.option_1
+        option2 = user.option_2
+        option3 = user.option_3
+        option4 = user.option_4
+        mcq_answer = user.mcq_answer
 
-        computerScienceStudent = ComputerScience.objects.all()
+        short_question = user.short_question
+        short_question_answer = user.short_answer
 
-        for index in computerScienceStudent:
+        broad_question = user.broad_question
+        broad_question_answer = user.broad_answer
 
-            index.exam_duration = exam_duration_
+        voice_question = user.voice_question
+        voice_answer = user.voice_answer
 
-            index.mcq_question = mcq_question_
+        user.number_of_mcq = count_for_mcq
+        user.number_of_short = count_for_short
+        user.number_of_broad = count_for_broad
+        user.number_of_voice = count_for_voice
 
-            index.option_1 = option_1
-            index.option_2 = option_2
-            index.option_3 = option_3
-            index.option_4 = option_4
+        user.exam_duration = request.POST.get('Exam_Duration')
 
-            index.mcq_answer = mcq_answer_
+        #Creating variable for inputs
+        temp = 0
+        while temp<int(count_for_mcq):
 
-            index.short_question = short_question_
-            index.short_answer = short_answer_
+            input_mcq_question = request.POST.get(f'mcq_question_{temp + 1}')
+            input_option_1 = request.POST.get(f'option{temp + 1}_1')
+            input_option_2 = request.POST.get(f'option{temp + 1}_2')
+            input_option_3 = request.POST.get(f'option{temp + 1}_3')
+            input_option_4 = request.POST.get(f'option{temp + 1}_4')
+            input_answer = request.POST.get(f'mcq_answer_{temp + 1}')
 
-            index.broad_question = broad_question_
-            index.broad_answer = broad_answer_
+            mcq_question.append(input_mcq_question)
+            option1.append(input_option_1)
+            option2.append(input_option_2)
+            option3.append(input_option_3)
+            option4.append(input_option_4)
+            mcq_answer.append(input_answer)
 
-            index.voice_question = voice_question_
-            index.voice_answer = voice_answer_
+            user.save()
 
-            index.save()
+            temp+=1
 
-        messages.success(request, "Question added")
+        temp = 0
+        while temp<int(count_for_short):
+
+            input_short_question = request.POST.get(f'short_question_{temp + 1}')
+            input_short_question_answer = request.POST.get(f'short_answer_{temp + 1}')
+
+            short_question.append(input_short_question)
+            short_question_answer.append(input_short_question_answer)
+
+            user.save()
+            temp+=1
+
+        temp = 0
+        while temp<int(count_for_broad):
+
+            input_broad_question = request.POST.get(f'broad_question_{temp + 1}')
+            input_broad_question_answer = request.POST.get(f'broad_answer_{temp + 1}')
+
+            broad_question.append(input_broad_question)
+            broad_question_answer.append(input_broad_question_answer)
+
+            user.save()
+            temp+=1
+
+        temp = 0
+        while temp<int(count_for_voice):
+
+            input_voice_question = request.POST.get(f'voice_question_{temp + 1}')
+            input_voice_question_answer = request.POST.get(f'voice_answer_{temp + 1}')
+
+            voice_question.append(input_voice_question)
+            voice_answer.append(input_voice_question_answer)
+
+            user.save()
+            temp+=1
+
 
         return render(request, 'Course/Faculty/assignment.html', {})
+
     
     return render(request, 'Course/Faculty/assignment.html', {})
     
@@ -252,7 +333,8 @@ def studentCourse(request):
         elif action == 'Announcements':
             return redirect('studentAnnouncements')
         elif action == 'Assignment':
-            return redirect('studentAssignment')
+            url = 'studentAssignment/?output={}'.format(username_)
+            return HttpResponseRedirect(url)
         else:
             url = 'marks/?output={}'.format(username_)
             return HttpResponseRedirect(url)
@@ -273,63 +355,169 @@ def viewStudent(request):
 
 def studentAssignment(request):
 
-    question = ComputerScience.objects.get(id=1)
+    username_ = request.GET.get('output')
+
+    question_ = ComputerScience.objects.get(id = 3)
+    mcq_questions = question_.mcq_question
+    options = [question_.option_1, question_.option_2, question_.option_3, question_.option_4]
+    
 
     context = {
-        'question':question
+        'mcq_data': zip(mcq_questions, *options),
+        'short_questions': question_.short_question,
+        'broad_questions': question_.broad_question,
+        'voice_questions': question_.voice_question,
+        'exam_duration': question_.exam_duration,
+        'username': username_,
     }
+
 
     if request.method == 'POST':
 
-        email_ = request.POST.get('email')
-        mcq_answer_ = request.POST.get('mcq_answer')
-        short_answer_ = request.POST.get('short-answer')
-        broad_answer_ = request.POST.get('broad-answer')
+        get_username = request.POST.get('username')
+        tab_changed_counter_ = request.POST.get('tab_changed_counter')
+        unknown_face_percentage__ = request.POST.get('unknown_face_percentage_')
 
 
+        question = ComputerScience.objects.get(student_name = get_username)
 
-        student = ComputerScience.objects.get(student_email=email_)
+        question.tab_change_counter = tab_changed_counter_
+        question.unknown_face_detection_percentage = unknown_face_percentage__
+        print(question_.student_name)
+        print(question.student_name)
+        question.save()
 
-        if student is not None: 
+        mcq_questions = question.mcq_question
+        options = [question.option_1, question.option_2, question.option_3, question.option_4]
 
-            if student.mcq_answer == mcq_answer_:
-                student.mcq_marks = 20.00
-            elif student.mcq_answer != mcq_answer_:
-                student.mcq_marks = 0.00
-                
-            if student.short_answer == short_answer_:
-                student.short_marks = 20.00
-            elif student.short_answer != short_answer_:
-                student.short_answer = 0.00
+        initial_marks_mcq = question.mcq_marks
+        if question.number_of_mcq != 0:
+            marks_for_each_mcq = float(initial_marks_mcq) / float(question.number_of_mcq)
 
-            student.student_marks = float(student.mcq_marks) + float(student.short_marks) + float(student.broad_marks) + float(student.voice_marks)
+        initial_marks_short = question.short_marks
+        if question.number_of_short != 0:
+            marks_for_each_short = float(initial_marks_short) / float(question.number_of_short)
 
-            student.save()
-            
+        initial_marks_broad = question.broad_marks
+        if question.number_of_broad != 0:
+            marks_for_each_broad = float(initial_marks_broad) / float(question.number_of_broad)
+        
+        initial_marks_voice = question.voice_marks
+        if question.number_of_voice != 0:
+            marks_for_each_voice = float(initial_marks_voice) / float(question.number_of_voice)
+        
+
+        # context = {
+        #     'mcq_data': zip(mcq_questions, *options),
+        #     'short_questions': question_.short_question,
+        #     'broad_questions': question_.broad_question,
+        #     'voice_questions': question_.voice_question,
+        #     'exam_duration': question_.exam_duration,
+        #     'username': username_,
+        # }
+
+        #for grading
+        mark_achived_mcq = 0
+        mark_achived_short = 0
+        mark_achived_broad = 0
+        mark_achived_voice = 0
+
+        no_of_mcq = question.number_of_mcq
+        no_of_short = question.number_of_short
+        no_of_broad = question.number_of_broad
+        no_of_voice = question.number_of_voice
+
+        input_mcq_answer = []
+        input_short_answer = []
+        input_broad_answer = []
+        input_voice_answer = []
+
+        index = 0
+        while index < no_of_mcq:
+            get_mcq_answer = request.POST.get(f'mcq_{index + 1}')
+            input_mcq_answer.append(get_mcq_answer)
+            index += 1
+
+        index = 0
+        while index < no_of_mcq:
+            ratio = fuzz.ratio(question_.mcq_answer[index], input_mcq_answer[index])
+            if ratio == 100:
+                mark_achived_mcq += marks_for_each_mcq
+            index += 1
+
+        print(mark_achived_mcq)
 
 
-        audio = pyaudio.PyAudio()
-        start_time = time.time()
-        recording_duration = 10
+        #For short question 
 
-        stream = audio.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, frames_per_buffer=1024)
+        index = 0
+        while index < no_of_short:
+            get_short_answer = request.POST.get(f'short_answer_{index + 1}')
+            input_short_answer.append(get_short_answer)
+            index += 1
 
-        frames = []
+        
+        index = 0
+        while index < no_of_short:
+            ratio = fuzz.token_set_ratio(question_.short_answer[index], input_short_answer[index])
+            print(ratio)
+            if ratio > 90:
+                mark_achived_short += marks_for_each_short
+            index += 1
+        
 
-        while time.time() - start_time < recording_duration:  
-            data = stream.read(1024)
-            frames.append(data)
+        #For broad question 
 
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()
+        index = 0
+        while index < no_of_broad:
+            get_broad_answer = request.POST.get(f'broad_answer_{index + 1}')
+            input_broad_answer.append(get_broad_answer)
+            index += 1
 
-        sound_file = wave.open("/Users/md.saminisrak/Desktop/Input_Test/myrecording.wav", "wb")
-        sound_file.setnchannels(1)
-        sound_file.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
-        sound_file.setframerate(44100)
-        sound_file.writeframes(b''.join(frames))
-        sound_file.close()
+        index = 0
+        while index < no_of_broad:
+            ratio = fuzz.token_sort_ratio(question_.broad_answer[index], input_broad_answer[index])
+            if ratio != 0:
+                ratio_percantage = (marks_for_each_broad/100) * float(ratio)
+                mark_achived_broad += ratio_percantage
+            else:
+                ratio_percantage = 0 
+            index += 1
+        
+
+
+        #checking voice input 
+
+        index = 0
+        while index < no_of_voice:
+            get_voice_answer = request.POST.get(f'voice_answer_{index + 1}')
+            input_voice_answer.append(get_voice_answer)
+            index += 1
+
+        index = 0
+        while index < no_of_voice:
+            ratio = fuzz.token_sort_ratio(question_.voice_answer[index], input_voice_answer[index])
+            if ratio != 0:
+                ratio_percantage = (marks_for_each_voice/100) * float(ratio)
+                mark_achived_voice += ratio_percantage
+            else:
+                ratio_percantage = 0
+            index += 1
+        
+
+        #Setting marks 
+        print(mark_achived_mcq)
+        question.student_marks = mark_achived_mcq + mark_achived_short + mark_achived_broad + mark_achived_voice
+        question.save()
+
+        voice_files = request.FILES.getlist('voice_input')
+
+        for voice_file in voice_files:
+            # Process each audio file as needed
+            fs = FileSystemStorage()
+            get_voice_answer = fs.save(voice_file.name, voice_file)
+            audio = AudioSegment.from_wav(get_voice_answer)
+            audio.export("converted_audio.wav", format="wav")
 
 
 
@@ -343,6 +531,9 @@ def marks(request):
     return render(request, "Course/Student/marks.html", {'student':student})
 
 
-
-
-
+def test(request):
+    if(request.method == "POST"):
+        input = request.POST.get('input')
+        print(input)
+        return redirect('studentCourse')
+    return render(request, 'test.html', {"exam_duration":20})

@@ -2,84 +2,65 @@
 <html>
 <head>
     <title>Faculty Course</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/images/1.png');
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        display: flex;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        overflow: hidden;
-    }
+        .options {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+        }
 
-    .sidenav {
-        background-color: #007BFF;
-        color: #fff;
-        width: 250px;
-        padding: 20px;
-        position: fixed;
-        top: 0;
-        bottom: 0;
-    }
+        .options-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-    .sidenav-title {
-        font-size: 24px;
-        font-weight: bold;
-    }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+        }
 
-    .sidenav-list {
-        list-style-type: none;
-        padding: 0;
-    }
+        .options-list li {
+            margin-bottom: 10px;
+        }
 
-    .sidenav-list li {
-        margin-bottom: 10px;
-    }
+        .options-list li input {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
 
-    .sidenav-list li a {
-        text-decoration: none;
-        color: #fff;
-        font-size: 16px;
-    }
-
-    .sidenav-list li a:hover {
-        text-decoration: underline;
-    }
-
-    .content {
-        margin-left: 250px;
-        padding: 20px;
-    }
-
-    .course-subsection {
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-top: 20px;
-    }
-
-
+        .options-list li input:hover {
+            text-decoration: underline;
+        }
     </style>
-
 </head>
 <body>
-
     <form action="." method="POST"> {% csrf_token %}
-        <nav class="sidenav">
-            <div class="sidenav-title">Faculty Course</div>
-            <ul class="sidenav-list">
+        <div class="options">
+            <div class="options-title">Faculty Course</div>
+            <ul class="options-list">
                 <li><input type="submit" name="action" value="Announcements"></li>
                 <li><input type="submit" name="action" value="Students"></li>
                 <li><input type="submit" name="action" value="Assignment"></li>
                 <li><input type="submit" name="action" value="Submit Grades"></li>
             </ul>
-        </nav>   
+        </div>
     </form>
-    
-
 </body>
 </html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tab Change Alert</title>
+</head>
+<body>
+    <h1>Tab Change Alert</h1>
+    <p>Tab Change Counter: <span id="counter">0</span></p>
+
+    <script>
+        let counter = 0;
+
+        // Function to update the counter and show alert
+        function tabChanged() {
+            counter++;
+            document.getElementById('counter').innerText = counter;
+
+            // Playing an alert sound (might not autoplay due to browser policies)
+            let audio = new Audio('path_to_your_alert_sound_file.mp3');
+            audio.play();
+        }
+
+        // Adding event listener for visibility change
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'hidden') {
+                tabChanged();
+                alert('Tab Changed');
+            }
+        });
+    </script>
+</body>
+</html>
