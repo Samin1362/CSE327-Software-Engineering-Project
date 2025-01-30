@@ -9,6 +9,9 @@ from django.http import HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from pydub import AudioSegment
 from thefuzz import fuzz, process
+from .serializers import StudentSerializer, ComputerScienceSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 # Create your views here.
@@ -126,7 +129,7 @@ def facultyCourse(request):
         elif action == 'Assignment':
             return redirect('facultyAssignments')
         else:
-            return redirect('homeFaculty')
+            return redirect('facultyGrades')
 
     return render(request, 'Course/Faculty/facultyCourse.html', {})
 
@@ -544,9 +547,8 @@ def marks(request):
     return render(request, "Course/Student/marks.html", {'student':student})
 
 
-def test(request):
-    if(request.method == "POST"):
-        input = request.POST.get('input')
-        print(input)
-        return redirect('studentCourse')
-    return render(request, 'test.html', {"exam_duration":20})
+def facultyGrades(request):
+
+    students = ComputerScience.objects.all()  # Fetch all student records
+
+    return render(request, 'Course/Faculty/submitGrade.html', {'students': students})
